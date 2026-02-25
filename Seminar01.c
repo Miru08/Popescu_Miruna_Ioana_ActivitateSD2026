@@ -39,6 +39,20 @@ void modificaDenumire(struct Produs* sursa, char* denumireNoua)
 	strcpy_s(sursa->denumire, strlen(denumireNoua) + 1, denumireNoua);
 }
 
+void dezalocareMemorie(struct Produs* sursa)
+{
+	if (sursa->denumire != NULL)
+	{
+		free(sursa->denumire);
+		sursa->denumire = NULL;// ca sa nu mai retina adresa blocului sters din heap
+	}
+}
+
+float calculeazaTotal(struct Produs sursa)
+{
+	return sursa.stoc * sursa.pret;
+}
+
 int main()
 {
 	struct Produs prod1;
@@ -49,6 +63,10 @@ int main()
 	modificaDenumire(&prod1, "Tableta");
 	afisare(prod1);
 
+	printf("Valoarea totala pentru %s este %5.2f RON.\n", prod1.denumire, calculeazaTotal(prod1));
+
+	dezalocareMemorie(&prod1);
+	afisare(prod1);
 
 	return 0;
 }
