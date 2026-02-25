@@ -1,4 +1,4 @@
-#include <stdio.h>
+﻿#include <stdio.h>
 #include <stdlib.h>
 
 struct Produs
@@ -25,11 +25,30 @@ struct Produs initializare(int idDat, int stocDat, const char* denumireData, flo
 	return p;
 }
 
+void afisare(struct Produs sursa)
+{
+	printf("Produsul cu id-ul %d, are denumirea %s, stocul: %d, pret: %5.2f si categoria: %c.\n", sursa.id, sursa.denumire, sursa.stoc, sursa.pret, sursa.categorie);
+	//pe noul cadru de stiva, se rezerva spațiu fizic pentru o noua variabila locala numita sursa (care este de tip struct Produs).
+	//Se copiaza automat fiecare octet din variabila originala prod1 (aflata în main) în noua structura sursa (aflata in afisare).
+}
+
+void modificaDenumire(struct Produs* sursa, char* denumireNoua)
+{
+	free((*sursa).denumire);
+	sursa->denumire = (char*)malloc(sizeof(char) * (strlen(denumireNoua) + 1));
+	strcpy_s(sursa->denumire, strlen(denumireNoua) + 1, denumireNoua);
+}
+
 int main()
 {
 	struct Produs prod1;
-
 	prod1 = initializare(1, 20, "Telefon Smart", 2000, 'A'); // "" pune null la final, in timp ce '' nu pune, avand doar un caracter
+
+	afisare(prod1);
+
+	modificaDenumire(&prod1, "Tableta");
+	afisare(prod1);
+
 
 	return 0;
 }
