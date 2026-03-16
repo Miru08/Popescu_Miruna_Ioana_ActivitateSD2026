@@ -47,13 +47,13 @@ struct Telefon copiazaTelefon(struct Telefon sursa)
     return initializare(sursa.id, sursa.RAM, sursa.producator, sursa.pret, sursa.serie);
 }
 
-struct Telefon *copiazaPrimeleNElemente(struct Telefon *vectorSursa, int nrElementeVector, int nrElementeCopiate)
+struct Telefon *copiazaPrimeleNElemente(struct Telefon *vectorSursa, int nrElementeVector, int *nrElementeCopiate)
 {
-    if (nrElementeCopiate > nrElementeVector)
-        nrElementeCopiate = nrElementeVector;
-    struct Telefon *vectorNou = (struct Telefon *)malloc(sizeof(struct Telefon) * nrElementeCopiate);
+    if (*nrElementeCopiate > nrElementeVector)
+        *nrElementeCopiate = nrElementeVector;
+    struct Telefon *vectorNou = (struct Telefon *)malloc(sizeof(struct Telefon) * (*nrElementeCopiate));
 
-    for (int i = 0; i < nrElementeCopiate; i++)
+    for (int i = 0; i < *nrElementeCopiate; i++)
         vectorNou[i] = copiazaTelefon(vectorSursa[i]);
 
     return vectorNou;
@@ -72,11 +72,12 @@ int main()
 
     afisareVector(vectorTelefoane, nrTel);
 
-    int nrTelCopiate = 2;
-    struct Telefon *primeleNTelefoane = (struct Telefon *)malloc(sizeof(struct Telefon) * nrTelCopiate);
-    primeleNTelefoane = copiazaPrimeleNElemente(vectorTelefoane, nrTel, nrTelCopiate);
+    int nrTelCopiate = 5;
+    struct Telefon *primeleNTelefoane = NULL;
+    primeleNTelefoane = copiazaPrimeleNElemente(vectorTelefoane, nrTel, &nrTelCopiate);
     printf("\nPrimele %d telefoane din vectorul initial: \n", nrTelCopiate);
-    afisareVector(primeleNTelefoane, nrTelCopiate);
+    if (primeleNTelefoane != NULL)
+        afisareVector(primeleNTelefoane, nrTelCopiate);
 
     return 0;
 }
