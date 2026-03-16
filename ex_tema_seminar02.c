@@ -42,6 +42,23 @@ void afisareVector(struct Telefon *vectorTel, int nrElemente) //*vectorTel retin
     }
 }
 
+struct Telefon copiazaTelefon(struct Telefon sursa)
+{
+    return initializare(sursa.id, sursa.RAM, sursa.producator, sursa.pret, sursa.serie);
+}
+
+struct Telefon *copiazaPrimeleNElemente(struct Telefon *vectorSursa, int nrElementeVector, int nrElementeCopiate)
+{
+    if (nrElementeCopiate > nrElementeVector)
+        nrElementeCopiate = nrElementeVector;
+    struct Telefon *vectorNou = (struct Telefon *)malloc(sizeof(struct Telefon) * nrElementeCopiate);
+
+    for (int i = 0; i < nrElementeCopiate; i++)
+        vectorNou[i] = copiazaTelefon(vectorSursa[i]);
+
+    return vectorNou;
+}
+
 int main()
 {
     struct Telefon t1 = initializare(1, 34, "Samsung", 3400, 'S');
@@ -55,7 +72,11 @@ int main()
 
     afisareVector(vectorTelefoane, nrTel);
 
-    
+    int nrTelCopiate = 2;
+    struct Telefon *primeleNTelefoane = (struct Telefon *)malloc(sizeof(struct Telefon) * nrTelCopiate);
+    primeleNTelefoane = copiazaPrimeleNElemente(vectorTelefoane, nrTel, nrTelCopiate);
+    printf("\nPrimele %d telefoane din vectorul initial: \n", nrTelCopiate);
+    afisareVector(primeleNTelefoane, nrTelCopiate);
 
     return 0;
 }
