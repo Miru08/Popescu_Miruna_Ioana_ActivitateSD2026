@@ -36,6 +36,7 @@ void adaugaMasinaInVector(Masina** masini, int* nrMasini, Masina masinaNoua)
 {
 	//adauga in vectorul primit o noua masina pe care o primim ca parametru
 	//ATENTIE - se modifica numarul de masini din vector;
+
 	Masina* temp = (Masina*)malloc(sizeof(Masina) * (*nrMasini + 1));
 	for (int i = 0; i < *nrMasini; i++)
 	{
@@ -47,23 +48,31 @@ void adaugaMasinaInVector(Masina** masini, int* nrMasini, Masina masinaNoua)
 	(*nrMasini)++;
 }
 
-Masina citireMasinaFisier(FILE* file) {
+Masina citireMasinaFisier(FILE* file)
+{
 	//functia citeste o masina dintr-un stream deja deschis
 	//masina citita este returnata;
-	char linie[256];
-	fgets(linie, 255, file);
-	char delimitator[3] = ",\n";
+
 	Masina masina;
-	masina.id = atoi(strtok(linie, delimitator));
+	char buffer[256];
+	char delimitator[3] = ",\n";
+
+	fgets(buffer, 255, file); //citeste cate o singura linie din fisier 
+
+	masina.id = atoi(strtok(buffer, delimitator)); //ascii to integer
 	masina.nrUsi = atoi(strtok(NULL, delimitator));
-	masina.pret = atof(strtok(NULL, delimitator));
-	char* aux = strtok(NULL, delimitator);
+	masina.pret = atof(strtok(NULL, delimitator)); //ascii to float
+
+	char* aux = strtok(NULL, delimitator);//aux primeste adresa primului caracter al modelului 
 	masina.model = (char*)malloc(sizeof(char) * (strlen(aux) + 1));
 	strcpy_s(masina.model, strlen(aux) + 1, aux);
+
 	aux = strtok(NULL, delimitator);
 	masina.numeSofer = (char*)malloc(sizeof(char) * (strlen(aux) + 1));
 	strcpy_s(masina.numeSofer, strlen(aux) + 1, aux);
-	masina.serie = strtok(NULL, delimitator)[0];
+
+	masina.serie = strtok(NULL, delimitator)[0];//strtok returneaza adresa unui char pointer, iar noi avem nevoie doar de primul caracter, de aceea folosim [0]
+
 	return masina;
 
 }
@@ -74,6 +83,7 @@ Masina* citireVectorMasiniFisier(const char* numeFisier, int* nrMasiniCitite)
 	//prin apelul repetat al functiei citireMasinaFisier()
 	//numarul de masini este determinat prin numarul de citiri din fisier
 	//ATENTIE - la final inchidem fisierul/stream-ul
+
 	FILE* file = fopen(numeFisier, "r");
 	if (file == NULL)
 	{
@@ -94,8 +104,18 @@ Masina* citireVectorMasiniFisier(const char* numeFisier, int* nrMasiniCitite)
 
 }
 
-void dezalocareVectorMasini(Masina** vector, int* nrMasini) {
-	//este dezalocat intreg vectorul de masini
+void dezalocareVectorMasini(Masina** vector, int* nrMasini)
+{
+	for (int i = 0; i < (*nrMasini); i++)
+	{
+		if ((*vector)[i].model != NULL)
+			free((*vector)[i].model);
+		if ((*vector)[i].numeSofer != NULL)
+			free((*vector)[i].numeSofer);
+	}
+	free(*vector);
+	*vector = NULL;
+	*nrMasini = 0;
 }
 
 int main()
@@ -103,7 +123,7 @@ int main()
 	int nrMasini = 0;
 	Masina* masini = citireVectorMasiniFisier("masini.txt", &nrMasini);
 	afisareVectorMasini(masini, nrMasini);
-
+	dezalocareVectorMasini(&masini, &nrMasini);
 
 	return 0;
 }
