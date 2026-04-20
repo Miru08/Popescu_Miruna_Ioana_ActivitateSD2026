@@ -99,6 +99,7 @@ Masina* citireVectorMasiniFisier(const char* numeFisier, int* nrMasiniCitite)
 			Masina masina = citireMasinaFisier(file);
 			adaugaMasinaInVector(&vectorMasini, nrMasiniCitite, masina);
 		}
+		fclose(file);
 		return vectorMasini;
 	}
 
