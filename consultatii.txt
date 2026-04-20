@@ -1,0 +1,6 @@
+1,1200,Popescu Ion,Dr. Ana-Maria,C
+2,450,Georgescu Alin,Dr. Ionescu Mihai,B
+3,150,Marin Andreea,Dr. Vasilescu Elena,A
+4,2100,Stan Mihai,Dr. Popescu Vlad,D
+5,320,Dobre Simona,Dr. Constantinescu Dan,C
+6,480,Matei Claudiu,Dr. Grigore Simona,E
