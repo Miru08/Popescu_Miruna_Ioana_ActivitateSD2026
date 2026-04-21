@@ -19,9 +19,16 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ex_tema_seminar02.c" />
+    <ClCompile Include="ex_tema_seminar03.c" />
     <ClCompile Include="Seminar01.c" />
     <ClCompile Include="seminar02.c" />
     <ClCompile Include="seminar03.c" />
+    <ClCompile Include="seminar04.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="consultatii.txt" />
+    <Text Include="masini.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

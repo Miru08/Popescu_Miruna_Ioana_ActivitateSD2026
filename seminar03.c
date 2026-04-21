@@ -1,130 +1,130 @@
-#define _CRT_SECURE_NO_WARNINGS
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-
-struct StructuraMasina {
-	int id;
-	int nrUsi;
-	float pret;
-	char* model;
-	char* numeSofer;
-	unsigned char serie;
-};
-typedef struct StructuraMasina Masina;
-
-void afisareMasina(Masina masina)
-{
-	printf("Id: %d || Nr usi: %d || Pret: %5.2f || Model: %s || Nume sofer: %s || Serie: %c.\n", masina.id, masina.nrUsi, masina.pret, masina.model, masina.numeSofer, masina.serie);
-}
-
-void afisareVectorMasini(Masina* masini, int nrMasini)
-{
-	if (masini == NULL || nrMasini <= 0)
-	{
-		printf("Vectorul de masini este gol!\n");
-		return;
-	}
-	for (int i = 0; i < nrMasini; i++)
-	{
-		afisareMasina(masini[i]);
-	}
-}
-
-void adaugaMasinaInVector(Masina** masini, int* nrMasini, Masina masinaNoua)
-{
-	//adauga in vectorul primit o noua masina pe care o primim ca parametru
-	//ATENTIE - se modifica numarul de masini din vector;
-
-	Masina* temp = (Masina*)malloc(sizeof(Masina) * (*nrMasini + 1));
-	for (int i = 0; i < *nrMasini; i++)
-	{
-		temp[i] = (*masini)[i];
-	}
-	temp[*nrMasini] = masinaNoua;
-	free(*masini);
-	*masini = temp;
-	(*nrMasini)++;
-}
-
-Masina citireMasinaFisier(FILE* file)
-{
-	//functia citeste o masina dintr-un stream deja deschis
-	//masina citita este returnata;
-
-	Masina masina;
-	char buffer[256];
-	char delimitator[3] = ",\n";
-
-	fgets(buffer, 255, file); //citeste cate o singura linie din fisier 
-
-	masina.id = atoi(strtok(buffer, delimitator)); //ascii to integer
-	masina.nrUsi = atoi(strtok(NULL, delimitator));
-	masina.pret = atof(strtok(NULL, delimitator)); //ascii to float
-
-	char* aux = strtok(NULL, delimitator);//aux primeste adresa primului caracter al modelului 
-	masina.model = (char*)malloc(sizeof(char) * (strlen(aux) + 1));
-	strcpy_s(masina.model, strlen(aux) + 1, aux);
-
-	aux = strtok(NULL, delimitator);
-	masina.numeSofer = (char*)malloc(sizeof(char) * (strlen(aux) + 1));
-	strcpy_s(masina.numeSofer, strlen(aux) + 1, aux);
-
-	masina.serie = strtok(NULL, delimitator)[0];//strtok returneaza adresa unui char pointer, iar noi avem nevoie doar de primul caracter, de aceea folosim [0]
-
-	return masina;
-
-}
-
-Masina* citireVectorMasiniFisier(const char* numeFisier, int* nrMasiniCitite)
-{
-	//functia primeste numele fisierului, il deschide si citeste toate masinile din fisier
-	//prin apelul repetat al functiei citireMasinaFisier()
-	//numarul de masini este determinat prin numarul de citiri din fisier
-	//ATENTIE - la final inchidem fisierul/stream-ul
-
-	FILE* file = fopen(numeFisier, "r");
-	if (file == NULL)
-	{
-		printf("Nu s-a putut deschide fisierul %s.\n", numeFisier);
-		return;
-	}
-	else
-	{
-		Masina* vectorMasini = NULL;
-		*nrMasiniCitite = 0;
-		while (!feof(file))
-		{
-			Masina masina = citireMasinaFisier(file);
-			adaugaMasinaInVector(&vectorMasini, nrMasiniCitite, masina);
-		}
-		fclose(file);
-		return vectorMasini;
-	}
-
-}
-
-void dezalocareVectorMasini(Masina** vector, int* nrMasini)
-{
-	for (int i = 0; i < (*nrMasini); i++)
-	{
-		if ((*vector)[i].model != NULL)
-			free((*vector)[i].model);
-		if ((*vector)[i].numeSofer != NULL)
-			free((*vector)[i].numeSofer);
-	}
-	free(*vector);
-	*vector = NULL;
-	*nrMasini = 0;
-}
-
-int main()
-{
-	int nrMasini = 0;
-	Masina* masini = citireVectorMasiniFisier("masini.txt", &nrMasini);
-	afisareVectorMasini(masini, nrMasini);
-	dezalocareVectorMasini(&masini, &nrMasini);
-
-	return 0;
-}
+//#define _CRT_SECURE_NO_WARNINGS
+//#include <stdio.h>
+//#include <stdlib.h>
+//#include <string.h>
+//
+//
+//struct StructuraMasina {
+//	int id;
+//	int nrUsi;
+//	float pret;
+//	char* model;
+//	char* numeSofer;
+//	unsigned char serie;
+//};
+//typedef struct StructuraMasina Masina;
+//
+//void afisareMasina(Masina masina)
+//{
+//	printf("Id: %d || Nr usi: %d || Pret: %5.2f || Model: %s || Nume sofer: %s || Serie: %c.\n", masina.id, masina.nrUsi, masina.pret, masina.model, masina.numeSofer, masina.serie);
+//}
+//
+//void afisareVectorMasini(Masina* masini, int nrMasini)
+//{
+//	if (masini == NULL || nrMasini <= 0)
+//	{
+//		printf("Vectorul de masini este gol!\n");
+//		return;
+//	}
+//	for (int i = 0; i < nrMasini; i++)
+//	{
+//		afisareMasina(masini[i]);
+//	}
+//}
+//
+//void adaugaMasinaInVector(Masina** masini, int* nrMasini, Masina masinaNoua)
+//{
+//	//adauga in vectorul primit o noua masina pe care o primim ca parametru
+//	//ATENTIE - se modifica numarul de masini din vector;
+//
+//	Masina* temp = (Masina*)malloc(sizeof(Masina) * (*nrMasini + 1));
+//	for (int i = 0; i < *nrMasini; i++)
+//	{
+//		temp[i] = (*masini)[i];
+//	}
+//	temp[*nrMasini] = masinaNoua;
+//	free(*masini);
+//	*masini = temp;
+//	(*nrMasini)++;
+//}
+//
+//Masina citireMasinaFisier(FILE* file)
+//{
+//	//functia citeste o masina dintr-un stream deja deschis
+//	//masina citita este returnata;
+//
+//	Masina masina;
+//	char buffer[256];
+//	char delimitator[3] = ",\n";
+//
+//	fgets(buffer, 255, file); //citeste cate o singura linie din fisier 
+//
+//	masina.id = atoi(strtok(buffer, delimitator)); //ascii to integer
+//	masina.nrUsi = atoi(strtok(NULL, delimitator));
+//	masina.pret = atof(strtok(NULL, delimitator)); //ascii to float
+//
+//	char* aux = strtok(NULL, delimitator);//aux primeste adresa primului caracter al modelului 
+//	masina.model = (char*)malloc(sizeof(char) * (strlen(aux) + 1));
+//	strcpy_s(masina.model, strlen(aux) + 1, aux);
+//
+//	aux = strtok(NULL, delimitator);
+//	masina.numeSofer = (char*)malloc(sizeof(char) * (strlen(aux) + 1));
+//	strcpy_s(masina.numeSofer, strlen(aux) + 1, aux);
+//
+//	masina.serie = strtok(NULL, delimitator)[0];//strtok returneaza adresa unui char pointer, iar noi avem nevoie doar de primul caracter, de aceea folosim [0]
+//
+//	return masina;
+//
+//}
+//
+//Masina* citireVectorMasiniFisier(const char* numeFisier, int* nrMasiniCitite)
+//{
+//	//functia primeste numele fisierului, il deschide si citeste toate masinile din fisier
+//	//prin apelul repetat al functiei citireMasinaFisier()
+//	//numarul de masini este determinat prin numarul de citiri din fisier
+//	//ATENTIE - la final inchidem fisierul/stream-ul
+//
+//	FILE* file = fopen(numeFisier, "r");
+//	if (file == NULL)
+//	{
+//		printf("Nu s-a putut deschide fisierul %s.\n", numeFisier);
+//		return;
+//	}
+//	else
+//	{
+//		Masina* vectorMasini = NULL;
+//		*nrMasiniCitite = 0;
+//		while (!feof(file))
+//		{
+//			Masina masina = citireMasinaFisier(file);
+//			adaugaMasinaInVector(&vectorMasini, nrMasiniCitite, masina);
+//		}
+//		fclose(file);
+//		return vectorMasini;
+//	}
+//
+//}
+//
+//void dezalocareVectorMasini(Masina** vector, int* nrMasini)
+//{
+//	for (int i = 0; i < (*nrMasini); i++)
+//	{
+//		if ((*vector)[i].model != NULL)
+//			free((*vector)[i].model);
+//		if ((*vector)[i].numeSofer != NULL)
+//			free((*vector)[i].numeSofer);
+//	}
+//	free(*vector);
+//	*vector = NULL;
+//	*nrMasini = 0;
+//}
+//
+//int main()
+//{
+//	int nrMasini = 0;
+//	Masina* masini = citireVectorMasiniFisier("masini.txt", &nrMasini);
+//	afisareVectorMasini(masini, nrMasini);
+//	dezalocareVectorMasini(&masini, &nrMasini);
+//
+//	return 0;
+//}

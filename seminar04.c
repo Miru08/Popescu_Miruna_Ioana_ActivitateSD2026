@@ -158,52 +158,90 @@ float calculeazaPretMediu(Nod* cap)
 		return 0;
 }
 
-void stergeMasiniDinSeria(Nod** cap, char serieCautata)
+//void stergeMasiniDinSeria(Nod** cap, char serieCautata)
+//{
+//	while ((*cap) && (*cap)->info.serie == serieCautata)
+//	{
+//		Nod* aux = *cap;
+//		(*cap) = aux->next;
+//		if (aux->info.numeSofer) {
+//			free(aux->info.numeSofer);
+//		}
+//		if (aux->info.model) {
+//			free(aux->info.model);
+//		}
+//		free(aux);
+//	}
+//	if ((*cap))
+//	{
+//		Nod* p = *cap;
+//		while (p)
+//		{
+//			while (p->next && p->next->info.serie != serieCautata)
+//			{
+//				p = p->next;
+//			}
+//			if (p->next)
+//			{
+//				Nod* aux = p->next;
+//				p->next = aux->next;
+//				if (aux->info.numeSofer)
+//				{
+//					free(aux->info.numeSofer);
+//				}
+//				if (aux->info.model)
+//				{
+//					free(aux->info.model);
+//				}
+//				free(aux);
+//			}
+//			else
+//			{
+//				p = NULL;
+//			}
+//		}
+//	}
+//
+//}
+void stergeMasiniDinSeria(Nod** primul, char serieCautata)
 {
-	while ((*cap) && (*cap)->info.serie == serieCautata)
+	Nod* curent = *primul;
+	Nod* anterior = NULL;
+
+	while (curent != NULL)
 	{
-		Nod* aux = *cap;
-		(*cap) = aux->next;
-		if (aux->info.numeSofer) {
-			free(aux->info.numeSofer);
-		}
-		if (aux->info.model) {
-			free(aux->info.model);
-		}
-		free(aux);
-	}
-	if ((*cap))
-	{
-		Nod* p = *cap;
-		while (p)
+		if (curent->info.serie == serieCautata)
 		{
-			while (p->next && p->next->info.serie != serieCautata)
-			{
-				p = p->next;
+			Nod* aux = curent;
+
+			if (anterior != NULL) {
+				anterior->next = curent->next; // Sarim peste nodul curent
 			}
-			if (p->next)
-			{
-				Nod* aux = p->next;
-				p->next = aux->next;
-				if (aux->info.numeSofer)
-				{
-					free(aux->info.numeSofer);
-				}
-				if (aux->info.model)
-				{
-					free(aux->info.model);
-				}
-				free(aux);
+			else {
+				(*primul) = curent->next;      // Mutam capul listei
 			}
-			else
+
+			curent = curent->next;             // Avansam in lista
+
+			// Dezalocam memoria
+			if (aux->info.model)
 			{
-				p = NULL;
+				free(aux->info.model);
 			}
+			if (aux->info.numeSofer)
+			{
+				free(aux->info.numeSofer);
+			}
+			free(aux);
+		}
+		else
+		{
+			// Daca nu stergem, doar avansam ambii pointeri
+			anterior = curent;
+			curent = curent->next;
 		}
 	}
-
 }
-
 float calculeazaPretulMasinilorUnuiSofer(Nod* cap, const char* numeSofer)
 {
 	// calculeaza pretul tuturor masinilor unui sofer.
