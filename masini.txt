@@ -8,3 +8,4 @@
 8,6,12000,Mokka,Gheorghe,U
 9,3,2700,Passat,Ionescu,I
 10,5,4000,Mokka,Gigel,B
+11,4,5000,Arkana,Vasilescu,C
