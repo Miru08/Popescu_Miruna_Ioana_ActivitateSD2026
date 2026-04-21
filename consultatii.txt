@@ -4,3 +4,4 @@
 4,2100,Stan Mihai,Dr. Popescu Vlad,D
 5,320,Dobre Simona,Dr. Constantinescu Dan,C
 6,480,Matei Claudiu,Dr. Grigore Simona,E
+7,900,Enache Radu,Dr. Ionescu Mihai,B
