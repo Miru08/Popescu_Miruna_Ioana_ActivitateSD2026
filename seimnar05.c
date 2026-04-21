@@ -335,7 +335,6 @@ int main()
 	{
 		free(numeSofer);
 	}
-
 	dezalocareListaMasini(&lista);
 	return 0;
 }
