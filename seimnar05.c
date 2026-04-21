@@ -190,23 +190,26 @@ void dezalocareLDMasini(ListaDubla* lista)
 	lista->nrNoduri = 0;
 }
 
-
 float calculeazaPretMediu(ListaDubla lista)
 {
-	Nod* p = lista.prim;
-	float suma = 0;
-	int contor = 0;
+	// int contor = 0;
 
-	while (p)
+	if (lista.nrNoduri > 0)
 	{
-		suma += p->info.pret;
-		contor++;
-		p = p->next;
+		Nod* p = lista.prim;
+		float suma = 0;
+		while (p)
+		{
+			suma += p->info.pret;
+			// contor++;
+			p = p->next;
+		}
+		return suma / lista.nrNoduri;
 	}
-	if (contor == 0)
-		return 0;
 
-	return suma / contor;
+	// if (contor == 0)
+		// return 0;
+	// return suma / contor;
 }
 
 void stergeMasiniDupaId(ListaDubla* ld, int id)
@@ -245,10 +248,13 @@ int main()
 
 	afisareInversaListaMasini(lista);
 
+	float pretMediu = calculeazaPretMediu(lista);
+	printf("\nPretul mediu: %.2f\n", pretMediu);
+
 	dezalocareListaMasini(&lista);
-	/*float pretMediu = calculeazaPretMediu(lista);
-	printf("Pretul mediu: %.2f\n", pretMediu);
-	stergeMasiniDupaId(&lista, 2);
+
+
+	/*stergeMasiniDupaId(&lista, 2);
 	printf("\nDupa stergere id=2:\n");
 	afisareListaMasiniDeLaInceput(lista);*/
 	return 0;
