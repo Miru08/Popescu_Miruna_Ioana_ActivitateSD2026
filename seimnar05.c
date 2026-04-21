@@ -216,27 +216,73 @@ void stergeMasiniDupaId(ListaDubla* ld, int id)
 {
 	Nod* p = ld->prim;
 
-	while (p && p->info.id != id)
+	while (p != NULL && p->info.id != id)
 	{
 		p = p->next;
 	}
 
-	if (!p)
+	if (p == NULL) // nu am gasit masina cu id-ul dat SAU lista e vida
 		return;
 
-	if (p->prev)
-		p->prev->next = p->next;
-	else
+	//daca avem ce sa stergem:
+
+	if (p->prev == NULL)
+	{
 		ld->prim = p->next;
-
-	if (p->next)
-		p->next->prev = p->prev;
+		if (ld->prim) {
+			ld->prim->prev = NULL;
+		}
+	}
 	else
+	{
+		p->prev->next = p->next;
+	}
+	if (p->next != NULL)
+	{
+		p->next->prev = p->prev;
+	}
+	else
+	{
 		ld->ultim = p->prev;
-
-	free(p->info.model);
-	free(p->info.numeSofer);
+	}
+	if (p->info.model)
+	{
+		free(p->info.model);
+	}
+	if (p->info.numeSofer)
+	{
+		free(p->info.numeSofer);
+	}
 	free(p);
+	ld->nrNoduri--;
+}
+
+char* getNumeSoferCeaMaiScumpaMasina(ListaDubla lista)
+{
+	float maxi = -1;
+	char* numeSofer = NULL;
+	Nod* p = lista.prim;
+	while (p != NULL)
+	{
+		if (p->info.pret > maxi && numeSofer == NULL)
+		{
+			maxi = p->info.pret;
+			numeSofer = (char*)malloc(sizeof(char) * strlen(p->info.numeSofer) + 1);
+			strcpy(numeSofer, p->info.numeSofer);
+		}
+		else if (p->info.pret > maxi && numeSofer != NULL)
+		{
+			maxi = p->info.pret;
+			free(numeSofer);
+			numeSofer = (char*)malloc(sizeof(char) * strlen(p->info.numeSofer) + 1);
+			strcpy(numeSofer, p->info.numeSofer);
+		}
+		p = p->next;
+	}
+	if (maxi == -1)
+		return NULL;
+	else
+		return numeSofer;
 }
 
 int main()
@@ -245,17 +291,17 @@ int main()
 	afisareListaMasiniDeLaInceput(lista);
 
 	printf("\nAfisare inversa:\n\n");
-
 	afisareInversaListaMasini(lista);
 
 	float pretMediu = calculeazaPretMediu(lista);
 	printf("\nPretul mediu: %.2f\n", pretMediu);
 
-	dezalocareListaMasini(&lista);
-
-
-	/*stergeMasiniDupaId(&lista, 2);
+	stergeMasiniDupaId(&lista, 2);
 	printf("\nDupa stergere id=2:\n");
-	afisareListaMasiniDeLaInceput(lista);*/
+	afisareListaMasiniDeLaInceput(lista);
+
+	printf("\nCea mai scumpa masina apartine soferului: %s", getNumeSoferCeaMaiScumpaMasina(lista));
+
+	dezalocareListaMasini(&lista);
 	return 0;
 }
