@@ -257,32 +257,60 @@ void stergeMasiniDupaId(ListaDubla* ld, int id)
 	ld->nrNoduri--;
 }
 
+//char* getNumeSoferCeaMaiScumpaMasina(ListaDubla lista)
+//{
+//	float maxi = -1;
+//	char* numeSofer = NULL;
+//	Nod* p = lista.prim;
+//	while (p != NULL)
+//	{
+//		if (p->info.pret > maxi && numeSofer == NULL)
+//		{
+//			maxi = p->info.pret;
+//			numeSofer = (char*)malloc(sizeof(char) * strlen(p->info.numeSofer) + 1);
+//			strcpy(numeSofer, p->info.numeSofer);
+//		}
+//		else if (p->info.pret > maxi && numeSofer != NULL)
+//		{
+//			maxi = p->info.pret;
+//			free(numeSofer);
+//			numeSofer = (char*)malloc(sizeof(char) * strlen(p->info.numeSofer) + 1);
+//			strcpy(numeSofer, p->info.numeSofer);
+//		}
+//		p = p->next;
+//	}
+//	if (maxi == -1)
+//		return NULL;
+//	else
+//		return numeSofer;
+//}
+
+//varianta smart
+
 char* getNumeSoferCeaMaiScumpaMasina(ListaDubla lista)
 {
-	float maxi = -1;
-	char* numeSofer = NULL;
-	Nod* p = lista.prim;
+
+	if (lista.prim == NULL)
+	{
+		return NULL;
+	}
+
+	Nod* max = lista.prim;
+	Nod* p = lista.prim->next;
+
 	while (p != NULL)
 	{
-		if (p->info.pret > maxi && numeSofer == NULL)
+		if (p->info.pret > max->info.pret)
 		{
-			maxi = p->info.pret;
-			numeSofer = (char*)malloc(sizeof(char) * strlen(p->info.numeSofer) + 1);
-			strcpy(numeSofer, p->info.numeSofer);
-		}
-		else if (p->info.pret > maxi && numeSofer != NULL)
-		{
-			maxi = p->info.pret;
-			free(numeSofer);
-			numeSofer = (char*)malloc(sizeof(char) * strlen(p->info.numeSofer) + 1);
-			strcpy(numeSofer, p->info.numeSofer);
+			max = p;
 		}
 		p = p->next;
 	}
-	if (maxi == -1)
-		return NULL;
-	else
-		return numeSofer;
+
+	char* nume = (char*)malloc(sizeof(char) * (strlen(max->info.numeSofer) + 1));
+	strcpy(nume, max->info.numeSofer);
+
+	return nume;
 }
 
 int main()
@@ -301,6 +329,12 @@ int main()
 	afisareListaMasiniDeLaInceput(lista);
 
 	printf("\nCea mai scumpa masina apartine soferului: %s", getNumeSoferCeaMaiScumpaMasina(lista));
+
+	char* numeSofer = getNumeSoferCeaMaiScumpaMasina(lista);
+	if (numeSofer)
+	{
+		free(numeSofer);
+	}
 
 	dezalocareListaMasini(&lista);
 	return 0;
