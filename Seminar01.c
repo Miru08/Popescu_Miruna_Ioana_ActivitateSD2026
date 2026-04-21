@@ -15,11 +15,11 @@ struct Produs initializare(int idDat, int stocDat, const char* denumireData, flo
 	struct Produs p;
 	p.id = idDat;
 	p.stoc = stocDat;
-	//p.denumire=denumireData => shallow copy atribuie adresa
-	p.denumire = (char*)malloc(sizeof(char) * (strlen(denumireData) + 1));	//cast explicit, transformam dintr-un pointer la void* in char*, 
-	//se calculeaza exact dimens ocupata de ce o sa fie in denumireData, inmultind dimens unui char cu cate char-uri sunt
-	//p.denumire retine adresa de inceput a blocului alocat in heap => acum putem copia ce am primit in denumireData la zona alocata pe heap
-	strcpy_s(p.denumire, strlen(denumireData) + 1, denumireData);
+	p.denumire = denumireData = > shallow copy atribuie adresa
+		p.denumire = (char*)malloc(sizeof(char) * (strlen(denumireData) + 1));	//cast explicit, transformam dintr-un pointer la void* in char*, 
+	se calculeaza exact dimens ocupata de ce o sa fie in denumireData, inmultind dimens unui char cu cate char - uri sunt
+		p.denumire retine adresa de inceput a blocului alocat in heap = > acum putem copia ce am primit in denumireData la zona alocata pe heap
+		strcpy_s(p.denumire, strlen(denumireData) + 1, denumireData);
 	p.pret = pretDat;
 	p.categorie = categorieData;
 	return p;
@@ -28,8 +28,8 @@ struct Produs initializare(int idDat, int stocDat, const char* denumireData, flo
 void afisare(struct Produs sursa)
 {
 	printf("Produsul cu id-ul %d, are denumirea %s, stocul: %d, pret: %5.2f si categoria: %c.\n", sursa.id, sursa.denumire, sursa.stoc, sursa.pret, sursa.categorie);
-	//pe noul cadru de stiva, se rezerva spațiu fizic pentru o noua variabila locala numita sursa (care este de tip struct Produs).
-	//Se copiaza automat fiecare octet din variabila originala prod1 (aflata în main) în noua structura sursa (aflata in afisare).
+	pe noul cadru de stiva, se rezerva spațiu fizic pentru o noua variabila locala numita sursa(care este de tip struct Produs).
+		Se copiaza automat fiecare octet din variabila originala prod1(aflata în main) în noua structura sursa(aflata in afisare).
 }
 
 void modificaDenumire(struct Produs* sursa, char* denumireNoua)
