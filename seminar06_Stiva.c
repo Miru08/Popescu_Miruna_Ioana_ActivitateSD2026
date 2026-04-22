@@ -154,27 +154,6 @@ void dezalocareStivaDeMasini(Nod** cap)
 	}
 }
 
-//QUEUE
-//Alegeti prin ce veti reprezenta coada si creati structura necesara acestei cozi
-//putem reprezenta o coada prin LSI, LDI sau vector
-
-typedef struct NodCoad NodCoada;
-typedef struct ListaDubla ListaDubla;
-
-struct NodCoada
-{
-	Masina info;
-	NodCoada* next;
-	NodCoada* prev;
-};
-
-struct ListaDubla
-{
-	NodCoada* first;
-	NodCoada* last;
-	int nrNoduri;
-};
-
 
 int main()
 {
