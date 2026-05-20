@@ -53,8 +53,8 @@ void afisareMasina(Masina sursa)
 {
 	printf("Id: %d\n", sursa.id);
 	printf("Nr usi: %d\n", sursa.nrUsi);
-	printf("Pret: %2.f\n", sursa.pret);
-	printf("Model: %s", sursa.model);
+	printf("Pret: %5.2f\n", sursa.pret);
+	printf("Model: %s\n", sursa.model);
 	printf("Nume sofer: %s\n", sursa.numeSofer);
 	printf("Seroa: %c\n\n", sursa.serie);
 }
@@ -149,6 +149,85 @@ void dezalocare(Nod** root)
 	}
 }
 
+Masina getMasinaById(Nod* root, int idDat)
+{
+	Masina m;
+	m.id = -1;
+
+	if (root != NULL)
+	{
+		if (root->info.id == idDat)
+		{
+			m = root->info;
+			m.model = (char*)malloc(sizeof(char) * (strlen(root->info.model) + 1));
+			strcpy(m.model, root->info.model);
+			m.numeSofer = (char*)malloc(sizeof(char) * (strlen(root->info.numeSofer) + 1));
+			strcpy(m.numeSofer, root->info.numeSofer);
+		}
+		else if (idDat < root->info.id)
+			return getMasinaById(root->stanga, idDat);
+		else if (idDat > root->info.id)
+			return getMasinaById(root->dreapta, idDat);
+	}
+	return m;
+}
+
+int getNrNoduri(Nod* root)
+{
+	if (root != NULL)
+	{
+		return 1 + getNrNoduri(root->stanga) + getNrNoduri(root->dreapta);
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+int getInaltimeArbore(Nod* root)
+{
+	if (root) {
+		int inaltimeS = getInaltimeArbore(root->stanga);
+		int inaltimeD = getInaltimeArbore(root->dreapta);
+		return max(inaltimeS, inaltimeD) + 1;
+	}
+
+	return 0;
+}
+
+float calculeazaPretTotal(Nod* root)
+{
+
+	if (root)
+	{
+		float ps = calculeazaPretTotal(root->stanga);
+		float pd = calculeazaPretTotal(root->dreapta);
+		return root->info.pret + pd + ps;
+	}
+	return 0;
+}
+
+float calculeazaPretulMasinilorUnuiSofer(Nod* root, const char* numeSofer)
+{
+	if (root)
+	{
+		float ps = calculeazaPretulMasinilorUnuiSofer(root->stanga, numeSofer);
+		float pd = calculeazaPretulMasinilorUnuiSofer(root->dreapta, numeSofer);
+
+		if (strcmp(root->info.numeSofer, numeSofer) == 0)
+		{
+
+			return root->info.pret + pd + ps;
+		}
+		else
+		{
+			return pd + ps;
+		}
+
+	}
+	return 0;
+}
+
 int main()
 {
 	Nod* root = citireArboreMasiniDinFisier("masini_arbore.txt");
@@ -161,6 +240,18 @@ int main()
 
 	printf("Afisare postordine:\n");
 	afisareMasinaPostordine(root);
+
+	printf("Masina cu id-ul 7: \n");
+	Masina m = getMasinaById(root, 7);
+	afisareMasina(m);
+
+	printf("Nr de noduri: %d\n", getNrNoduri(root));
+
+	printf("Inaltimea: %d\n", getInaltimeArbore(root));
+
+	printf("Pret total: %5.2f\n", calculeazaPretTotal(root));
+
+	printf("Pret sofer : %5.2f\n", calculeazaPretulMasinilorUnuiSofer(root, "Ionescu"));
 
 	dezalocare(&root);
 	return 0;
