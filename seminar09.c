@@ -56,7 +56,7 @@ void afisareMasina(Masina sursa)
 	printf("Pret: %5.2f\n", sursa.pret);
 	printf("Model: %s\n", sursa.model);
 	printf("Nume sofer: %s\n", sursa.numeSofer);
-	printf("Seroa: %c\n\n", sursa.serie);
+	printf("Seria: %c\n\n", sursa.serie);
 }
 
 void adaugaMasinaInArbore(Nod** root, Masina masinaAdaugata)
@@ -186,7 +186,8 @@ int getNrNoduri(Nod* root)
 
 int getInaltimeArbore(Nod* root)
 {
-	if (root) {
+	if (root)
+	{
 		int inaltimeS = getInaltimeArbore(root->stanga);
 		int inaltimeD = getInaltimeArbore(root->dreapta);
 		return max(inaltimeS, inaltimeD) + 1;
@@ -223,7 +224,6 @@ float calculeazaPretulMasinilorUnuiSofer(Nod* root, const char* numeSofer)
 		{
 			return pd + ps;
 		}
-
 	}
 	return 0;
 }
@@ -244,6 +244,8 @@ int main()
 	printf("Masina cu id-ul 7: \n");
 	Masina m = getMasinaById(root, 7);
 	afisareMasina(m);
+	free(m.model);
+	free(m.numeSofer);
 
 	printf("Nr de noduri: %d\n", getNrNoduri(root));
 
