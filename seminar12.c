@@ -47,11 +47,6 @@ void afisareMasina(Masina masina)
 	printf("Serie: %c\n\n", masina.serie);
 }
 
-//1. 
-// structuri necesare
-//dorim stocarea unui graf intr-o lista de liste
-//astfel avem nod ListaPrincipala si NodListaSecundara
-
 typedef struct NodPrincipal NodP;
 typedef struct NodSecundar NodS;
 
@@ -68,20 +63,16 @@ struct NodSecundar
 	NodS* next;
 };
 
-
-//2.
-//functii de inserare in liste
-//si in principala si in secundara
-
-void inserarelistaP(NodP** graf, Masina masinaNoua)
+void inserarelistaP(NodP** cap, Masina masinaNoua)
 {
 	NodP* nou = (NodP*)malloc(sizeof(NodP));
 	nou->info = masinaNoua;
 	nou->next = NULL;
 	nou->vec = NULL;
-	if (*graf)
+
+	if (*cap)
 	{
-		NodP* aux = *graf;
+		NodP* aux = *cap;
 
 		while (aux->next)
 		{
@@ -91,52 +82,40 @@ void inserarelistaP(NodP** graf, Masina masinaNoua)
 	}
 	else
 	{
-		*graf = nou;
+		*cap = nou;
 	}
 
 }
 
-
-void inserareinlistaS(NodS** primS, NodP* vec)
+void inserareinlistaS(NodS** cap, NodP* vec)
 {
 	NodS* nou = (NodS*)malloc(sizeof(NodS));
 	nou->info = vec;
 	nou->next = NULL;
-	if (*primS)
+
+	if (*cap)
 	{
-		NodS* aux = *primS;
+		NodS* aux = *cap;
 		while (aux->next)
 		{
 			aux = aux->next;
 		}
-
 		aux->next = nou;
 	}
 	else
 	{
-		(*primS) = nou;
+		(*cap) = nou;
 	}
 }
 
 
-
-//3.
-//functie de cautarea in lista principala dupa ID
-NodP* cautaNodDupaID(NodP* listaPrincipala, int id)
+NodP* cautaNodDupaID(NodP* cap, int idCautat)
 {
-	NodP* n = NULL;
-	if (listaPrincipala)
+	while (cap != NULL && cap->info.id != idCautat)
 	{
-		while (listaPrincipala)
-		{
-			if (listaPrincipala->info.id == id)
-			{
-				return listaPrincipala;
-			}
-			listaPrincipala = listaPrincipala->next;
-		}
+		cap = cap->next;
 	}
-	return n;
+	return cap;
 }
 
 //4.
@@ -160,36 +139,32 @@ void inserareMuchie(NodP* listaPrincipala, int idStart, int idStop)
 
 NodP* citireNoduriMasiniDinFisier(const char* numeFisier)
 {
-	//functia primeste numele fisierului, il deschide si citeste toate masinile din fisier
-	//prin apelul repetat al functiei citireMasinaDinFisier()
-	//ATENTIE - la final inchidem fisierul/stream-ul
-	FILE* f = fopen(numeFisier, "r");
+	FILE* file = fopen(numeFisier, "r");
 	NodP* listaP = NULL;
-	while (!feof(f))
+
+	while (!feof(file))
 	{
-		Masina m = citireMasinaDinFisier(f);
+		Masina m = citireMasinaDinFisier(file);
 		inserarelistaP(&listaP, m);
 
 	}
-	fclose(f);
+	fclose(file);
 	return listaP;
 }
 
 void citireMuchiiDinFisier(const char* numeFisier, NodP* listaP)
 {
-	//functia primeste numele fisierului, il deschide si citeste 
-	//toate id-urile de start si stop pentru fiecare muchie
-	//ATENTIE - la final inchidem fisierul/stream-ul
-	FILE* f = fopen(numeFisier, "r");
+	FILE* file = fopen(numeFisier, "r");
 	NodP* listaS = NULL;
-	while (!feof(f))
+
+	while (!feof(file))
 	{
 		int idStart;
 		int idStop;
-		fscanf(f, "%d %d", &idStart, &idStop);
+		fscanf(file, "%d %d", &idStart, &idStop);
 		inserareMuchie(listaP, idStart, idStop);
 	}
-	fclose(f);
+	fclose(file);
 
 }
 
